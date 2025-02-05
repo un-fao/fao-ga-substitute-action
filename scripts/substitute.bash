@@ -52,6 +52,10 @@ dump_output_file() {
 substitute() {
   source_env_files
 
+  if [[ $REPLACE_UNDEFINED == false ]]; then
+    local ENVSUBST_VARS=$(env | cut -d'=' -f1 | sed 's/^/$/' | tr '\n' ' ')
+  fi
+
   if [[ -n $VARIABLES ]]; then
     local ENVSUBST_VARS=""
     for VARIABLE in $VARIABLES; do
