@@ -19,6 +19,7 @@ inputs:
   replace_undefined:
     description: 'Enable/disable replacement of undefined variables with empty string'
     required: false
+    default: 'false'
   prefixes:
     description: 'List of prefixes to select env vars in addition to `variables`'
     required: false
