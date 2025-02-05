@@ -138,6 +138,10 @@ validate_output_directory() {
   fi
 }
 
+validate_replace_undefined() {
+  echo "replace_undefined: [$REPLACE_UNDEFINED]"
+}
+
 validate_enable_in_place() {
   echo "enable-in-place: [$ENABLE_IN_PLACE]"
 }
@@ -154,6 +158,7 @@ validate_inputs() {
   validate_variables
   validate_prefixes
   validate_output_directory
+  validate_replace_undefined
   validate_enable_in_place
   validate_enable_dump
 
