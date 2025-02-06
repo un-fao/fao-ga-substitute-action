@@ -16,6 +16,10 @@ inputs:
   variables:
     description: 'List of variables to substitute; the rest is ignored'
     required: false
+  replace_undefined:
+    description: 'Enable/disable replacement of undefined variables with empty string'
+    required: false
+    default: 'false'
   prefixes:
     description: 'List of prefixes to select env vars in addition to `variables`'
     required: false
@@ -39,6 +43,7 @@ runs:
       ENV_FILES: '${{ inputs.env-files }}'
       INPUT_FILES: '${{ inputs.input-files }}'
       VARIABLES: '${{ inputs.variables }}'
+      REPLACE_UNDEFINED: '${{ inputs.replace_undefined }}'
       PREFIXES: '${{ inputs.prefixes }}'
       OUTPUT_DIRECTORY: '${{ inputs.output-directory }}'
       ENABLE_IN_PLACE: ${{ inputs.enable-in-place == 'true' }}

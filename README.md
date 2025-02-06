@@ -50,15 +50,16 @@ flowchart TD
 
 ### Inputs
 
-|       Input        | Required | Default | Description                                                    |
-| :----------------: | :------: | :-----: | :------------------------------------------------------------- |
-|    `env-files`     | `false`  |         | List of `.env` files containing `VARIABLE=VALUE` per line      |
-|   `input-files`    |  `true`  |         | List of input files to substitute environment variables        |
-|    `variables`     | `false`  |         | List of variables to substitute; the rest is ignored           |
-|     `prefixes`     | `false`  |         | List of prefixes to select env vars in addition to `variables` |
-| `output-directory` | `false`  |         | Output directory path when `enable-in-place: false`            |
-| `enable-in-place`  | `false`  | `true`  | Enable/disable in-place substitution                           |
-|   `enable-dump`    | `false`  | `false` | Enable/disable dumping of updated/generated files              |
+|       Input        | Required | Default | Description                                                                         |
+| :----------------: | :------: | :-----: | :-----------------------------------------------------------------------------------|
+|    `env-files`     | `false`  |         | List of `.env` files containing `VARIABLE=VALUE` per line                           |
+|   `input-files`    |  `true`  |         | List of input files to substitute environment variables                             |
+|    `variables`     | `false`  |         | List of variables to substitute; the rest is ignored (overriders replace_undefined) |
+| `replace_undefined`| `false`  |         | Enable/disable replacement of undefined variables with empty string                 |
+|     `prefixes`     | `false`  |         | List of prefixes to select env vars in addition to `variables`                      |
+| `output-directory` | `false`  |         | Output directory path when `enable-in-place: false`                                 |
+| `enable-in-place`  | `false`  | `true`  | Enable/disable in-place substitution                                                |
+|   `enable-dump`    | `false`  | `false` | Enable/disable dumping of updated/generated files                                   |
 
 ## Examples
 
