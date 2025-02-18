@@ -86,9 +86,11 @@ substitute() {
 
   for INPUT_FILE in $INPUT_FILES; do
     echo "::group::Substituting [$INPUT_FILE]"
-    local OUTPUT_FILE="processed_$INPUT_FILE"
+    local OUTPUT_FILE=""
     if [[ -n $OUTPUT_DIRECTORY ]]; then
-      OUTPUT_FILE="$OUTPUT_DIRECTORY/$(basename "$OUTPUT_FILE")"
+      OUTPUT_FILE="$OUTPUT_DIRECTORY/preprocessed_$(basename "$INPUT_FILE")"
+    else
+      OUTPUT_FILE="$INPUT_FILE"
     fi
     if [[ -n $ENVSUBST_VARS ]]; then
       echo "ENVSUBST_VARS: [$ENVSUBST_VARS]"
