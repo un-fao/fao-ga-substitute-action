@@ -90,7 +90,7 @@ substitute() {
     if [[ -n $OUTPUT_DIRECTORY ]]; then
       OUTPUT_FILE="$OUTPUT_DIRECTORY/processed_$(basename "$INPUT_FILE")"
     else
-      OUTPUT_FILE="processed_$INPUT_FILE"
+      OUTPUT_FILE="$(dirname "$INPUT_FILE")/processed_$(basename "$INPUT_FILE")"
     fi
     if [[ -n $ENVSUBST_VARS ]]; then
       echo "ENVSUBST_VARS: [$ENVSUBST_VARS]"
