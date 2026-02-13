@@ -1,0 +1,85 @@
+name: Check Upstream Update
+
+on:
+  schedule:
+    - cron: '0 0 1 * *' # Every 1st day of the month at midnight
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  check-upstream:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check for updates
+        id: check
+        run: |
+          git remote add upstream https://github.com/iamazeem/substitute-action.git
+          git fetch upstream main
+          
+          # Count commits that are in upstream but not in local main
+          UPSTREAM_COMMITS=$(git rev-list --count main..upstream/main)
+          
+          if [ "$UPSTREAM_COMMITS" -gt 0 ]; then
+            echo "updates_available=true" >> $GITHUB_OUTPUT
+            echo "commit_count=$UPSTREAM_COMMITS" >> $GITHUB_OUTPUT
+            
+            # Get commit log and format it for the issue body
+            git log main..upstream/main --oneline > log.txt
+          else
+            echo "updates_available=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create Issue if updates available
+        if: steps.check.outputs.updates_available == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          COUNT=${{ steps.check.outputs.commit_count }}
+          LOG=$(cat log.txt)
+          
+          # Create the body content
+          cat <<EOF > issue_body.md
+          The original repository ([iamazeem/substitute-action](https://github.com/iamazeem/substitute-action)) has **$COUNT** new commits!
+
+          ### New commits:
+          \`\`\`
+          $LOG
+          \`\`\`
+
+          ### How to update manually:
+          Run the following commands in your terminal:
+
+          \`\`\`bash
+          # 1. Add the upstream remote (only if you haven't yet)
+          git remote add upstream https://github.com/iamazeem/substitute-action.git
+
+          # 2. Fetch the latest changes from upstream
+          git fetch upstream main
+
+          # 3. Merge the changes into your local main branch
+          git merge upstream/main
+
+          # 4. Push the updates to your fork on GitHub
+          git push origin main
+          \`\`\`
+
+          *Note: If there are merge conflicts, you will need to resolve them manually during step 3.*
+          EOF
+
+          # Check if an issue with the same title already exists to avoid duplicates
+          EXISTING_ISSUE=$(gh issue list --search "Upstream Update Available" --state open --json number --jq '.[0].number')
+          
+          if [ -z "$EXISTING_ISSUE" ]; then
+            gh issue create --title "Upstream Update Available" --body-file issue_body.md
+          else
+            echo "An issue already exists (#$EXISTING_ISSUE). Updating it with latest info."
+            gh issue edit "$EXISTING_ISSUE" --body-file issue_body.md
+          fi
