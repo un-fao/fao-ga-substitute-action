@@ -5,11 +5,6 @@ on:
     - cron: '0 0 1 * *' # Every 1st day of the month at midnight
   workflow_dispatch: # Allow manual trigger
 
-permissions:
-  contents: write
-  issues: write
-  pull-requests: write
-
 jobs:
   check-upstream:
     runs-on: ubuntu-latest
@@ -42,8 +37,7 @@ jobs:
       - name: Create Issue if updates available
         if: steps.check.outputs.updates_available == 'true'
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.SYNC_PAT }}
         run: |
           COUNT=${{ steps.check.outputs.commit_count }}
           LOG=$(cat log.txt)
