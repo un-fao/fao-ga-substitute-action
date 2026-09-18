@@ -58,6 +58,7 @@ jobs:
 
     - name: 'Verify {enable-in-place: false, enable-dump: true}'
       run: |
+        test ! -e test/test.env
         diff test/test.json.env test/expected/test.json
         diff test/test.yaml.env test/expected/test.yaml
         git restore .
@@ -129,6 +130,11 @@ jobs:
         output-directory: ./output
         enable-in-place: false
         enable-dump: true
+
+    - name: Restore env fixture for the next invocation
+      run: |
+        test ! -e test/test.env
+        git restore test/test.env
 
     - name: 'Run {variables, prefixes, enable-in-place: false, enable-dump: true}'
       uses: ./

@@ -52,3 +52,13 @@ runs:
     run: |
       $GITHUB_ACTION_PATH/scripts/validate.bash
       $GITHUB_ACTION_PATH/scripts/substitute.bash
+  - name: Remove env files
+    if: ${{ always() }}
+    env:
+      ENV_FILES: '${{ inputs.env-files }}'
+    shell: bash
+    run: |
+      set -f
+      for ENV_FILE in $ENV_FILES; do
+        rm -f -- "$ENV_FILE"
+      done
