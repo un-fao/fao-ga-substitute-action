@@ -14,6 +14,9 @@ variables in files.
 - Supports `$VARIABLE` or `${VARIABLE}` syntax to specify variables in input
   files.
 - Allows multiple `.env` files in addition to the `env` context.
+- Removes files listed in `env-files` after substitution, including when validation
+  or substitution fails. Recreate them before another invocation if needed.
+  Substituted values remain in the output files; cleanup requires a running runner.
 - Allows nested use of variables in `.env` files from previously listed files
   and the `env` context.
 - Supports multiline values but format-specific escaping is not supported. Any
